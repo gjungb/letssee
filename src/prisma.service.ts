@@ -1,9 +1,18 @@
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
+
+interface LogOptions extends Prisma.PrismaClientOptions {
+  log: [
+    {
+      emit: 'event';
+      level: 'query';
+    },
+  ];
+}
 
 @Injectable()
 export class PrismaService
-  extends PrismaClient<{ log: [{ emit: 'event'; level: 'query' }] }>
+  extends PrismaClient<LogOptions>
   implements OnModuleInit, OnModuleDestroy {
   constructor() {
     super({
